@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+<head>
+</head>
+
+<form method="post" action="/">
+  <input type="button" class="btn btn-primary btn-lg btn-block" value="update" name="update"/>
+</form>
+
+<table class="table table-hover table-dark">
+ <thead>
+  <tr>
+   <th>id</th>
+   <th>desc</th>
+   <th>abbr</th>
+   <th>wind direction</th>
+   <th>date of prediction</th>
+   <th>weather report for</th>
+   <th>min temp</th>
+   <th>max temp</th>
+   <th>current temp</th>
+   </tr>
+   {% for row in data %}
+        <tr>
+        {% for d in row %}
+            <td>{{ d }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+ <thead>
+</table>
