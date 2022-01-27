@@ -7,11 +7,11 @@ def create_db():
     conn = sqlite3.connect(dbfile)
     c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS weather (
-                                        id integer PRIMARY KEY,
+                                        id integer,
                                         weather_state_name text NOT NULL,
                                         weather_state_abbr text NOT NULL,
                                         wind_direction_compass text NOT NULL,
-                                        created date NOT NULL,
+                                        created date PRIMARY KEY,
                                         applicable_date date NOT NULL,
                                         min_temp integer NOT NULL,
                                         max_temp integer NOT NULL,

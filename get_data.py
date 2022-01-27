@@ -4,9 +4,9 @@ import json
 import calendar
 import datetime
 import time
-import pandas as pd 
 from db import insert_to_table, select_all, create_db
 from requests.exceptions import HTTPError
+import dateutil.parser
 
 create_db()
 
@@ -33,6 +33,9 @@ def weather_for_every_day():
         most_consensus_dayly['min_temp']=round(most_consensus_dayly['min_temp'], 2)
         most_consensus_dayly['max_temp']=round(most_consensus_dayly['max_temp'], 2)
         most_consensus_dayly['the_temp']=round(most_consensus_dayly['the_temp'], 2)
+        dt = dateutil.parser.parse(most_consensus_dayly['created'])
+        most_consensus_dayly['created']=dt.strftime('%Y-%m-%d') 
+        
         value = most_consensus_dayly.pop("predictability")
         value = most_consensus_dayly.pop("visibility")
         value = most_consensus_dayly.pop("humidity")
