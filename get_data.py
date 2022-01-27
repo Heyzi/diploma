@@ -4,7 +4,7 @@ import json
 import calendar
 import datetime
 import time
-import db
+import pandas as pd 
 from db import insert_to_table, select_all, create_db
 from requests.exceptions import HTTPError
 
@@ -30,6 +30,9 @@ def weather_for_every_day():
         response.raise_for_status()
         jsonResponse = response.json()
         most_consensus_dayly = max(jsonResponse, key=lambda x: x["predictability"])
+        most_consensus_dayly['min_temp']=round(most_consensus_dayly['min_temp'], 2)
+        most_consensus_dayly['max_temp']=round(most_consensus_dayly['max_temp'], 2)
+        most_consensus_dayly['the_temp']=round(most_consensus_dayly['the_temp'], 2)
         value = most_consensus_dayly.pop("predictability")
         value = most_consensus_dayly.pop("visibility")
         value = most_consensus_dayly.pop("humidity")
