@@ -22,7 +22,7 @@ def find_all_month_date():
     return every_month_day
 
 
-def weather_for_every_day():
+def weather_for_every_day(day):
     try:
         response = requests.get(
             "https://www.metaweather.com/api/location/2122265/" + day
@@ -30,9 +30,9 @@ def weather_for_every_day():
         response.raise_for_status()
         jsonResponse = response.json()
         most_consensus_dayly = max(jsonResponse, key=lambda x: x["predictability"])
-        most_consensus_dayly['min_temp']=round(most_consensus_dayly['min_temp'], 2)
-        most_consensus_dayly['max_temp']=round(most_consensus_dayly['max_temp'], 2)
-        most_consensus_dayly['the_temp']=round(most_consensus_dayly['the_temp'], 2)
+        most_consensus_dayly['min_temp']=round(most_consensus_dayly['min_temp'], 1)
+        most_consensus_dayly['max_temp']=round(most_consensus_dayly['max_temp'], 1)
+        most_consensus_dayly['the_temp']=round(most_consensus_dayly['the_temp'], 1)
         dt = dateutil.parser.parse(most_consensus_dayly['created'])
         most_consensus_dayly['created']=dt.strftime('%Y-%m-%d') 
         
@@ -42,17 +42,25 @@ def weather_for_every_day():
         value = most_consensus_dayly.pop("air_pressure")
         value = most_consensus_dayly.pop("wind_speed")
         value = most_consensus_dayly.pop("wind_direction")
-
     except HTTPError as http_err:
         print(f"HTTP error occurred: {http_err}")
     except Exception as err:
         print(f"Other error occurred: {err}")
     return most_consensus_dayly
 
+def weather_to_db():
+    dates_list = find_all_month_date()
 
-dates_list = find_all_month_date()
+    for day in dates_list:
+       most_consensus_monthly = weather_for_every_day(day)
+       insert_to_table(most_consensus_monthly)
 
-for day in dates_list:
-    most_consensus_monthly = weather_for_every_day()
-    insert_to_table(most_consensus_monthly)
+if __name__ == "__main__":
+  while 1:
+      weather_to_db()
+  
+      dt = datetime.datetime.now() + datetime.timedelta(hours=1)
+      dt = dt.replace(minute=10)
 
+      while datetime.datetime.now() < dt:
+          time.sleep(1)

@@ -11,8 +11,8 @@ def create_db():
                                         weather_state_name text NOT NULL,
                                         weather_state_abbr text NOT NULL,
                                         wind_direction_compass text NOT NULL,
-                                        created date PRIMARY KEY,
-                                        applicable_date date NOT NULL,
+                                        created text NOT NULL,
+                                        applicable_date text PRIMARY KEY NOT NULL,
                                         min_temp integer NOT NULL,
                                         max_temp integer NOT NULL,
                                         the_temp integer NOT NULL)""")
@@ -33,7 +33,6 @@ def select_all():
     c.execute("SELECT * FROM weather ORDER BY applicable_date ASC")
     conn.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
     result = c.execute('SELECT * FROM weather ORDER BY applicable_date ASC').fetchall()
-    print(type(result))
     conn.close()
     return(result)
 

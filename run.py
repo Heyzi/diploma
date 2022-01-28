@@ -3,8 +3,7 @@ import requests
 from flask import Flask, render_template
 from flask import request
 from requests.exceptions import HTTPError
-from db import insert_to_table, select_all
-import get_data
+from db import  select_all
 
 result = select_all()
 
@@ -12,7 +11,6 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    print(request.method)
 #    if request.method == "POST":
 #        if request.form.get("update") == "update":
 #            
