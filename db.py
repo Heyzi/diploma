@@ -8,14 +8,14 @@ def create_db():
     c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS weather (
                                         id integer,
-                                        weather_state_name text NOT NULL,
-                                        weather_state_abbr text NOT NULL,
-                                        wind_direction_compass text NOT NULL,
-                                        created text NOT NULL,
-                                        applicable_date text PRIMARY KEY NOT NULL,
-                                        min_temp integer NOT NULL,
-                                        max_temp integer NOT NULL,
-                                        the_temp integer NOT NULL)""")
+                                        weather_state_name text,
+                                        weather_state_abbr text,
+                                        wind_direction_compass text,
+                                        created text,
+                                        applicable_date text PRIMARY KEY,
+                                        min_temp integer,
+                                        max_temp integer,
+                                        the_temp integer)""")
 
     conn.commit()
     conn.close()
@@ -30,9 +30,15 @@ def insert_to_table(most_consensus_monthly):
 def select_all():
     conn = sqlite3.connect(dbfile)
     c = conn.cursor()
-    c.execute("SELECT * FROM weather ORDER BY applicable_date ASC")
-    conn.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
     result = c.execute('SELECT * FROM weather ORDER BY applicable_date ASC').fetchall()
     conn.close()
+    print(result)
     return(result)
 
+def user_select(userdate):
+    date=userdate
+    conn = sqlite3.connect(dbfile)
+    c = conn.cursor()
+    result = c.execute("SELECT * FROM weather WHERE strftime('%Y-%m', applicable_date) = ? ORDER BY applicable_date ASC", (date,)).fetchall()
+    conn.close()
+    return(result)
