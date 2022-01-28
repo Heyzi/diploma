@@ -21,6 +21,15 @@ def find_all_month_date():
     ]
     return every_month_day
 
+def selected_month(userdate):
+    userdate = datetime.datetime.strptime(userdate, "%Y-%m")
+    day = "01"
+    num_days = calendar.monthrange(userdate.year, userdate.month)[1]
+    every_month_day = [
+         datetime.date(userdate.year, userdate.month, day).strftime("%Y/%m/%d")
+         for day in range(1, num_days + 1)
+         ]
+    return every_month_day
 
 def weather_for_every_day(day):
     try:
@@ -50,6 +59,13 @@ def weather_for_every_day(day):
 
 def weather_to_db():
     dates_list = find_all_month_date()
+
+    for day in dates_list:
+       most_consensus_monthly = weather_for_every_day(day)
+       insert_to_table(most_consensus_monthly)
+
+def userdate_weather_to_db(userdate):
+    dates_list = selected_month(userdate)
 
     for day in dates_list:
        most_consensus_monthly = weather_for_every_day(day)
