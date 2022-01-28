@@ -14,10 +14,18 @@
 
 <head>
 </head>
+<nav class="navbar navbar-dark bg-dark"> 
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="month" id="start" name="weather-for"
+       value="2021-01"
+       min="2013-01-01" max="2030-12-31">
+       
+      <form method="post" action="/">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">update</button>
+    </form>
+    </form> 
+</nav>
 
-<form method="post" action="/">
-  <input type="button" class="btn btn-primary btn-lg btn-block" value="update" name="update"/>
-</form>
 
 <table class="table table-hover table-dark">
  <thead>
