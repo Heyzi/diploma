@@ -32,7 +32,6 @@ def select_all():
     c = conn.cursor()
     result = c.execute('SELECT * FROM weather ORDER BY applicable_date ASC').fetchall()
     conn.close()
-    print(result)
     return(result)
 
 def user_select(userdate):
