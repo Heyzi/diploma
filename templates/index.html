@@ -15,11 +15,11 @@
 <head>
 </head>
 <nav class="navbar navbar-dark bg-dark"> 
-    <form action="{{ url_for('upd') }}" method="post" class="form-inline my-2 my-lg-0">
- 
-     <input class="form-control mr-sm-2" type="month" id="start" name="update_month" value="2021-01"
+    <form action="{{ url_for('upd') }}" method="post" class="form-inline my-2 my-lg-0"> 
+     <input class="form-control mr-sm-2" type="month" id="start" name="update_month" value="{{cur_month}}"
        min="2016-01-01" max="2023-12-31">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">update</button>
+      <input class="btn btn-outline-success my-2 my-sm-0" type ="submit" name="action" value="search">
+      <input style="margin-left:3px" class="btn btn-outline-success my-2 my-sm-0" type ="submit" name="action" value="update">
     </form> 
 </nav>
 
