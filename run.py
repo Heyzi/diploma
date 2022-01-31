@@ -22,11 +22,10 @@ def index():
 #             flash('No data found')
              showmodal=True
              result2 = user_select(userdate)
-     #     else:
-     #        showmodal=False
-     #        result2 = user_select(userdate)
-     #        print(result2)
-     #        print("asdasd")
+          else:
+              showmodal=False
+              result2 = user_select(userdate)
+
       else:
        showmodal=False
        user_select(userdate)
