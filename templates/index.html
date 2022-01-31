@@ -15,14 +15,53 @@
 <head>
 </head>
 <nav class="navbar navbar-dark bg-dark"> 
-    <form action="{{ url_for('upd') }}" method="post" class="form-inline my-2 my-lg-0"> 
+    <form action="{{ url_for('index') }}" method="post" class="form-inline my-2 my-lg-0"> 
      <input class="form-control mr-sm-2" type="month" id="start" name="update_month" value="{{cur_month}}"
        min="2016-01-01" max="2023-12-31">
       <input class="btn btn-outline-success my-2 my-sm-0" type ="submit" name="action" value="search">
       <input style="margin-left:3px" class="btn btn-outline-success my-2 my-sm-0" type ="submit" name="action" value="update">
     </form> 
+ 
 </nav>
 
+{% if showmodal %}
+<script>
+$(window).on('load',function(){
+
+            $('#myModal').modal('show');
+
+});</script>
+
+<div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Error</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    not all predictable data is exist :(
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+      </div>
+</div>
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
 
 <table class="table table-hover table-dark">
  <thead>
@@ -46,3 +85,4 @@
     {% endfor %}
  <thead>
 </table>
+

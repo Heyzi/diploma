@@ -1,36 +1,45 @@
 #!/usr/bin/python3
-import requests
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, request, flash
 from db import user_select
 import time
-from backend import weather_to_db, userdate_weather_to_db
-
+from backend import userdate_weather_to_db
 
 app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    date = time.strftime("%Y-%m")
-    result = user_select(time.strftime("%Y-%m"))
-    return render_template("index.html", data=result, cur_month=date)
+    
+    if request.method == "GET":
+      date = time.strftime("%Y-%m")
+      result = user_select(time.strftime("%Y-%m"))
 
-@app.route('/upd', methods=['POST'])
-def upd():
-    userdate = request.form["update_month"]
-    if request.form['action'] == 'update':
-     userdate_weather_to_db(userdate)
-     result2 = user_select(userdate)
+      return render_template("index.html", data=result, cur_month=date)
     else:
-     user_select(userdate)
-     result2 = user_select(userdate)
-
-    return render_template("index.html", data=result2, cur_month=userdate)
+      userdate = request.form["update_month"]
+      if request.form['action'] == 'update':
+          if (userdate_weather_to_db(userdate)=="nodata"):
+#unfancy variant:
+#             flash('No data found')
+             showmodal=True
+             result2 = user_select(userdate)
+     #     else:
+     #        showmodal=False
+     #        result2 = user_select(userdate)
+     #        print(result2)
+     #        print("asdasd")
+      else:
+       showmodal=False
+       user_select(userdate)
+       result2 = user_select(userdate)
+       if not result2:
+         showmodal=True
+    return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal)
 
 @app.errorhandler(500)
 def internal_error(error):
-
     return render_template("500.html")
 
 if __name__ == "__main__":
+    app.secret_key = 'qwerty'
     app.run(host="0.0.0.0", port=8080)
 

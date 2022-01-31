@@ -2,4 +2,4 @@
 How to run:
 - source ./env.sh
 - ./run.sh
--  suffer
+- suffer
