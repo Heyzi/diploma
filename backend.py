@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 import requests
-import json
 import calendar
 import datetime
 import time
-from db import insert_to_table, select_all, create_db
+from db import insert_to_table, create_db
 from requests.exceptions import HTTPError
 import dateutil.parser
 
