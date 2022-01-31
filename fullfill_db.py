@@ -12,9 +12,8 @@ def list_dates():
     for i in range(delta.days + 1):
        day = start_date + timedelta(days=i)
        day = day.strftime("%Y/%m/%d")
-       print(day)
        insert_to_table(weather_for_every_day(day))
-       print("added to db")
+       print(day + ' added to db')
     return day
 print(list_dates())
 
