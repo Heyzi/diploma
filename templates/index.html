@@ -36,13 +36,13 @@ $(window).on('load',function(){
       <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Error</h4>
+                    <h4 class="modal-title">Warning</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    not all predictable data is exist :(
+                  Weather forecasts were not received for all dates :(
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-dismiss="modal">Close</button>
@@ -66,15 +66,15 @@ $(window).on('load',function(){
 <table class="table table-hover table-dark">
  <thead>
   <tr>
-   <th>id</th>
-   <th>desc</th>
-   <th>abbr</th>
-   <th>wind direct</th>
-   <th>prediction from</th>
-   <th>report for</th>
-   <th>min temp</th>
-   <th>max temp</th>
-   <th>current temp</th>
+   <th>ID</th>
+   <th>DESC</th>
+   <th>ABBR</th>
+   <th>WIND</th>
+   <th>PREDICTION</th>
+   <th>PREDICT FOR</th>
+   <th>TEMP MIN</th>
+   <th>TEMP MAX</th>
+   <th>TEMP CURRENT</th>
    </tr>
    {% for row in data %}
         <tr>
@@ -85,4 +85,21 @@ $(window).on('load',function(){
     {% endfor %}
  <thead>
 </table>
+
+
+<style>
+  body {
+    background: #343a3f;
+  }
+  .table td, .table th {
+    padding: 0.55rem !important;
+    border: 1px solid #28a745 !important;
+  }
+
+  .table-dark {
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+  </style>
 
