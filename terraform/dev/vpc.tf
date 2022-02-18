@@ -1,21 +1,47 @@
-#vpc
-resource "aws_vpc" "my-dev-vpc" {
-    cidr_block = "10.100.0.0/16"
-
-    tags = {
-        Name  = "${var.ENV}-vpc"
-        Owner = "${var.OWNER}"
-    }
+variable "region" {
+  default     = "us-east-2"
+  description = "AWS region"
 }
-#subnets
-resource "aws_subnet" "my-dev-subnet" {
-  count                   = "${length(var.SUBNETS)}"
-  vpc_id                  = "${aws_vpc.my-dev-vpc.id}"
-  cidr_block              = "${var.SUBNETS[count.index]}"
-  availability_zone       = "eu-west-1a"
-  map_public_ip_on_launch = false
+
+provider "aws" {
+  region = var.region
+}
+
+data "aws_availability_zones" "available" {}
+
+locals {
+  cluster_name = "education-eks-${random_string.suffix.result}"
+}
+
+resource "random_string" "suffix" {
+  length  = 8
+  special = false
+}
+
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "3.2.0"
+
+  name                 = "education-vpc"
+  cidr                 = "10.0.0.0/16"
+  azs                  = data.aws_availability_zones.available.names
+  private_subnets      = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets       = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
+
   tags = {
-        Name  = "${var.ENV}-subnet-${var.SUBNETS[count.index]}"
-        Owner = "${var.OWNER}"
-    }
+    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
+  }
+
+  public_subnet_tags = {
+    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
+    "kubernetes.io/role/elb"                      = "1"
+  }
+
+  private_subnet_tags = {
+    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
+    "kubernetes.io/role/internal-elb"             = "1"
+  }
 }
