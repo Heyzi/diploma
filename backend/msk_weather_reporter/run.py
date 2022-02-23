@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, flash
 from db import user_select
 import time
+import os
 from backend import userdate_weather_to_db
 
 app = Flask(__name__)
@@ -43,5 +44,6 @@ def page_not_found(error):
     return render_template("404.html"), 404
 
 if __name__ == "__main__":
-    app.secret_key = 'qwerty'
-    app.run(host="0.0.0.0", port=8080)
+ #   app.secret_key = 'qwerty'
+    app.run(host=os.getenv('RUN_HOST'), port=os.getenv('RUN_PORT'))
+#test
