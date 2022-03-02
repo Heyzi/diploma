@@ -1,13 +1,11 @@
 FROM python:3.8-slim-buster
-
-WORKDIR /app
-
+WORKDIR /app/msk_weather_reporter
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
-
-COPY . .
-
-WORKDIR /app/msk_weather_reporter
-ENV RUN_PORT=8080
+COPY ./msk_weather_reporter/ ./
+ENV RUN_PORT=5555
 ENV RUN_HOST=0.0.0.0
-#ENTRYPOINT python3 /app/msk_weather_reporter/run.py
+ENV FLASK_APP=app.py
+CMD ["flask", "run"]
+#CMD [ "python", "./run.py" ]
+
