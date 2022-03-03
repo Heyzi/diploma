@@ -5,7 +5,7 @@ services:
     build: 
      context: ./backend/
      dockerfile: ./Dockerfile
-    command: python /app/msk_weather_reporter/run.py
+#    command: python /app/msk_weather_reporter/run.py
     environment:
       - FLASK_ENV=development
   frontend:

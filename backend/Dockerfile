@@ -5,7 +5,5 @@ RUN pip3 install -r requirements.txt
 COPY ./msk_weather_reporter/ ./
 ENV RUN_PORT=5555
 ENV RUN_HOST=0.0.0.0
-ENV FLASK_APP=app.py
-CMD ["flask", "run"]
-#CMD [ "python", "./run.py" ]
+CMD [ "python", "./run.py" ]
 
