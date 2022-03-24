@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo dnf update -y 
+#sudo dnf update -y 
 sudo dnf install wget -y
 sudo wget http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo -O /etc/yum.repos.d/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
