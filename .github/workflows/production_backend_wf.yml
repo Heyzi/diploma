@@ -3,7 +3,7 @@ name: Deploy backend to Amazon ECS
 on:
   push:
     paths:
-      - 'app/backend'
+      - 'app/backend/*'
 
 env:
   AWS_REGION: MY_AWS_REGION                   # set this to your preferred AWS region, e.g. us-west-1
