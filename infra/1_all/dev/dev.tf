@@ -14,6 +14,7 @@ module "network" {
   environment          = var.ENV
 
 
+
   # VPC_ID         = module.default-vpc.vpc_id
   # DEF_RT         = module.default-vpc.default_rt_id
   # AZ             = var.AZ
