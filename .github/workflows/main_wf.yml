@@ -1,7 +1,11 @@
 name: Deploy to ECR
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
+    paths:
+      - app/backend/Dockerfile
+  pull_request:
+    branches: [ master ]
     paths:
       - app/backend/Dockerfile
 
