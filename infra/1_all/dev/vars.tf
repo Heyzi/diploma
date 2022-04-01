@@ -8,10 +8,10 @@ variable "PUB_KEY" {
   type    = string
   default = "~/.ssh/id_rsa.pub"
 }
-variable "INSTANCE_TYPE" {
-  type    = string
-  default = "t2.micro"
-}
+# variable "INSTANCE_TYPE" {
+#   type    = string
+#   default = "t2.micro"
+# }
 variable "INGRESS_RULES" {
   type    = list(number)
   default = [22, 8080]
@@ -24,7 +24,7 @@ variable "ENV" {
   type    = string
   default = "dev"
 }
-variable "AZ" {
-  type    = string
-  default = "eu-central-1a"
+variable "SUBNETS_CIDR" {
+  type        = list
+  description = "CIDR block for Subnet"
 }
