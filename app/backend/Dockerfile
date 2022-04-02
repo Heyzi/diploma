@@ -5,7 +5,7 @@ ENV SERVICE_NAME="msk_weather_reporter"
 WORKDIR /app/$SERVICE_NAME
 
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --no-cache-dir
 COPY ./msk_weather_reporter/ ./
 
 RUN groupadd -g 1111 $SERVICE_NAME && \
