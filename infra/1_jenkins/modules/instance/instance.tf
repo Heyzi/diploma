@@ -17,16 +17,13 @@ variable "SUBNET_ID" {
 }
 
 data "aws_ami" "ami_selected" {
-  most_recent = true
+   most_recent = true
+
   filter {
-    name   = "name"
-    values = ["RHEL-8*"]
+    name = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
   }
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-  owners = ["309956199498"]
+  owners = ["amazon"]
 }
 
 resource "aws_instance" "default_instance" {

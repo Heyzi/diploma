@@ -2,7 +2,7 @@ variable "AWS_REGION" {
   default = "eu-central-1"
 }
 variable "CIDR_BLOCK" {
-  default = "10.10.10.0/24"
+  default = "11.10.10.0/24"
 }
 variable "PUB_KEY" {
   type    = string
