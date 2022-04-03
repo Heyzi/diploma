@@ -14,8 +14,8 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 ## Main information
 
 - Dockerfile validated in [hadolint](https://github.com/hadolint/hadolint)
-- Some test maded
-- add <>
+- <info>
+-  <info>
 
 ---
 
@@ -26,8 +26,14 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 - 
 ##### Deploy infractraction:
 1. Deploy eks:
->cd infra/2_eks_cluster
+>cd infra/1_eks_cluster
 >terraform init
-2. Configure eks from workstation: 
+2. Configure aws cli on workstation:
+>aws configure
+3. Configure eks on workstation: 
 >aws eks update-kubeconfig --region eu-central-1 --name epam_diploma-dev-cluster
-2. Deploy Jenkins
+3. Deploy Jenkins:
+>cd infra/2_jenkins/dev
+>terraform init
+4. Login and configure Jenkins
+>%url%:8080
