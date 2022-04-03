@@ -1,20 +1,7 @@
 terraform {
   required_version = ">= 0.12"
 }
-variable "ENV" {
-}
-variable "INSTANCE_TYPE" {
-}
-variable "VPC_ID" {
-}
-variable "PUB_KEY" {
-}
-variable "INGRESS_RULES" {
-}
-variable "EGRESS_RULES" {
-}
-variable "SUBNET_ID" {
-}
+
 
 data "aws_ami" "ami_selected" {
    most_recent = true
@@ -36,6 +23,7 @@ resource "aws_instance" "default_instance" {
   tags = {
     Name = "${var.ENV}-instance"
   }
+
 }
 
 resource "aws_security_group" "default_sg" {
@@ -72,6 +60,7 @@ resource "aws_security_group" "default_sg" {
 
 resource "aws_eip" "default_eip" {
   instance = aws_instance.default_instance.id
+  depends_on = [aws_instance.default_instance]
   vpc      = true
 }
 output "public_ip" {
@@ -86,6 +75,26 @@ resource "aws_key_pair" "jenkins_key" {
 
     Name = "${var.ENV}-key"
   }
+}
+
+resource "null_resource" "preparation" {
+  triggers = {
+        instance = aws_instance.default_instance.id
+    }
+
+  connection {
+    host        ="${aws_eip.default_eip.public_ip}"
+    user        = "ec2-user"
+    timeout     = "90s"
+    private_key = file("~/.ssh/id_rsa")
+    agent = false
+  }
+    provisioner "file" {
+    source  = "/Users/platonovaa/.kube/config"
+    destination  = "/home/ec2-user/kube_config" 
+  }
+
+
 }
 
 

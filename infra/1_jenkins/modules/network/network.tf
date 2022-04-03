@@ -1,16 +1,7 @@
 terraform {
   required_version = ">= 0.12"
 }
-variable "ENV" {
-}
-variable "VPC_ID" {
-}
-variable "DEF_RT" {
-}
-variable "CIDR_BLOCK" {
-}
-variable "AZ" {
-}
+
 
 resource "aws_internet_gateway" "default_igw" {
   vpc_id = var.VPC_ID
