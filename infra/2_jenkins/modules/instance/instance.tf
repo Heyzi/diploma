@@ -93,6 +93,10 @@ resource "null_resource" "preparation" {
     source  = "/Users/platonovaa/.kube/config"
     destination  = "/home/ec2-user/kube_config" 
   }
+    provisioner "file" {
+    source  = "/Users/platonovaa/.aws/credentials"
+    destination  = "/home/ec2-user/aws_credentials" 
+  }
 
 
 }
