@@ -2,10 +2,6 @@ terraform {
   required_version = ">= 0.12"
 }
 
-variable "ENV" {
-}
-variable "CIDR_BLOCK" {
-}
 
 resource "aws_vpc" "default_vpc" {
   cidr_block       = var.CIDR_BLOCK
