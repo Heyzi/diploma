@@ -23,17 +23,29 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 #### Prerequirements:
 - terraform
 - aws cli
-- 
+- 1 user
+
 ##### Deploy infractraction:
+
 1. Deploy eks:
->cd infra/1_eks_cluster
->terraform init
+```sh
+cd infra/1_eks_cluster
+terraform init
+```
 2. Configure aws cli on workstation:
->aws configure
+```sh
+aws configure
+```
 3. Configure eks on workstation: 
->aws eks update-kubeconfig --region eu-central-1 --name epam_diploma-dev-cluster
+```sh
+aws eks update-kubeconfig --region eu-central-1 --name epam_diploma-dev-cluster
+```
 3. Deploy Jenkins:
->cd infra/2_jenkins/dev
->terraform init
+```sh
+cd infra/2_jenkins/dev
+terraform init
+```
 4. Login and configure Jenkins
->%url%:8080
+```sh
+%url%:8080
+```
