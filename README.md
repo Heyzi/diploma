@@ -25,5 +25,9 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 - aws cli
 - 
 ##### Deploy infractraction:
-1. asd
-2. do this
+1. Deploy eks:
+>cd infra/2_eks_cluster
+>terraform init
+2. Configure eks from workstation: 
+>aws eks update-kubeconfig --region eu-central-1 --name epam_diploma-dev-cluster
+2. Deploy Jenkins
