@@ -3,12 +3,13 @@ node {
     def ImageName = "helloworld.k8s.java.repo"
     def ECRLink = "https://112312.dkr.ecr.ap-southeast-2.amazonaws.com"
 
-    stage ('checkout'){
-        final scmVars = checkout(scm)
-        ImageTag = "${checkout(scm).GIT_COMMIT}"
-    }
-        
-    stage('Docker Build and Push'){
+stage('Checkout'){
+      git 'https://github.com/Heyzi/diploma.git'
+      sh "git rev-parse --short HEAD > .git/commit-id"
+      imageTag= readFile('.git/commit-id').trim()
+}
+
+stage('Docker Build and Push'){
         dir("${env.WORKSPACE}"){
             docker.build("${ImageName}:latest")
         }
@@ -18,9 +19,9 @@ node {
         }
      }
 
-    stage('Deploy helloworld on K8s'){
+stage('Deploy helloworld on K8s'){
         dir("${env.WORKSPACE}"){
-            sh "ansible-playbook ./CI-CD/deploy/Jenkins_deploy_playbook.yml  --extra-vars ECRLink=${ECRLink}  --extra-vars ImageName=${ImageName} --extra-vars imageTag=${ImageTag} --extra-vars Namespace=${Namespace}"
+            sh "ansible-playbook ./cicd/k8s_app_deploy.yml  --extra-vars ECRLink=${ECRLink}  --extra-vars ImageName=${ImageName} --extra-vars imageTag=${ImageTag} --extra-vars Namespace=${Namespace}"
         }
     }
 }
