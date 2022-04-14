@@ -26,3 +26,10 @@ sudo mv /home/ec2-user/kube_config /var/lib/jenkins/.kube/config
 sudo chown -R jenkins:jenkins /var/lib/jenkins/
 sudo chmod 400 /var/lib/jenkins/.kube/config
 sudo systemctl restart jenkins
+#ansible
+sudo yum install -y python-pip
+sudo pip install -y ansible
+#helm
+sudo wget https://get.helm.sh/helm-v3.8.2-linux-amd64.tar.gz
+sudo tar -xzvf helm-v3.8.2-linux-amd64.tar.gz
+sudo mv linux-amd64/helm /usr/bin

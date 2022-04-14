@@ -28,7 +28,7 @@ resource "aws_instance" "default_instance" {
 
 resource "aws_security_group" "default_sg" {
   name        = "Jenkins Security Group"
-  description = "Allow traffic to access Jenkins instrance"
+  description = "Allow traffic to access Jenkins instance"
   vpc_id      = var.VPC_ID
 
   dynamic "ingress" {
