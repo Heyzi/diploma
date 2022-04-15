@@ -40,8 +40,8 @@ jobs:
         IMAGE_TAG: ${{ env.GITHUB_SHA_SHORT }}
       run: |
            docker image build \
-            --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest app/frontend --no-cache \
-            --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG app/frontend --no-cache \
-            .
+            --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+            --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            app/frontend --no-cache
             docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
             docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
