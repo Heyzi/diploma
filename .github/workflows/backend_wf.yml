@@ -5,7 +5,7 @@ on:
       - development
       - main
     paths:
-      - app/backend
+      - app/backend/*
 
 jobs:
   build-and-deploy:
