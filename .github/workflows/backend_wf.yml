@@ -36,7 +36,7 @@ jobs:
       - name: 'Build, tag, and push image to Amazon ECR'
         env:
           ECR_REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
-          ECR_REPOSITORY: '${{ env.namespace }}-frontend-diploma'
+          ECR_REPOSITORY: '${{ env.namespace }}-backend-diploma'
           IMAGE_TAG: '${{ env.GITHUB_SHA_SHORT }}'
         run: |
           docker image build \
@@ -45,20 +45,10 @@ jobs:
            app/frontend --no-cache
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-           
-      - name: Install and configure kubectl
-        run: >
-          VERSION=$(curl --silent
-          https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-          curl
-          https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl
-          \
-              --progress-bar \
-              --location \
-              --remote-name
-          chmod +x kubectl
+      - name: Get AWS cluster name
+        run:  echo "cluster_name=$(aws eks list-clusters --output json | jq -r '.clusters[]')" >> $GITHUB_ENV
+        
 
-          sudo mv kubectl /usr/local/bin/
-
-          echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
