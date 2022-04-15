@@ -17,6 +17,7 @@ jobs:
           then echo "namespace=prod" >> $GITHUB_ENV
           else echo "namespace=dev" >> $GITHUB_ENV
         fi
+        echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
 
     - name: Check out code
       uses: actions/checkout@v2
@@ -36,7 +37,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.namespace }}-frontend-diploma
-        IMAGE_TAG: ${{ GITHUB_SHA }}
+        IMAGE_TAG: ${{ env.GITHUB_SHA_SHORT }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f /app/frontend
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
