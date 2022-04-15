@@ -53,6 +53,12 @@ jobs:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
 
+      - name: Echo kubeconfig
+        run:  helm version
+
+      - name: Echo kubeconfig
+        run:  kubectl config view
+
       - name: Install and configure kubectl
         run: >
           VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
