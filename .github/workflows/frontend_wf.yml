@@ -14,8 +14,8 @@ jobs:
     - name: Set env vars
       run: |
         if [ $GITHUB_REF_NAME = 'main' ]
-          then NAMESPACE="prod"
-          else NAMESPACE="dev"
+          then echo "namespace=prod" >> $GITHUB_ENV
+          else echo "namespace=dev" >> $GITHUB_ENV
         fi
 
     - name: Check out code
@@ -35,7 +35,7 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ NAMESPACE }}-frontend-diploma
+        ECR_REPOSITORY: ${{ env.namespace }}-frontend-diploma
         IMAGE_TAG: ${{ GITHUB_SHA }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f /app/frontend
