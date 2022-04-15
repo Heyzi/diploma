@@ -39,5 +39,9 @@ jobs:
         ECR_REPOSITORY: ${{ env.namespace }}-frontend-diploma
         IMAGE_TAG: ${{ env.GITHUB_SHA_SHORT }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG app/frontend --no-cache
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+           docker image build \
+            --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest app/frontend --no-cache \
+            --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG app/frontend --no-cache \
+            .
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
