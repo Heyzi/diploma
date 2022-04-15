@@ -53,16 +53,16 @@ jobs:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
 
-      - name: Install and configure kubectl
-        run: >
-          VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+      # - name: Install and configure kubectl
+      #   run: >
+      #     VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-          curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
-              --progress-bar \
-              --location \
-              --remote-name
-          chmod +x kubectl
+      #     curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
+      #         --progress-bar \
+      #         --location \
+      #         --remote-name
+      #     chmod +x kubectl
 
-          sudo mv kubectl /usr/local/bin/
+      #     sudo mv kubectl /usr/local/bin/
 
-          echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
+      #     echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
