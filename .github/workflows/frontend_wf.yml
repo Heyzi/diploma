@@ -25,14 +25,10 @@ jobs:
         # Disabling shallow clone is recommended for improving relevancy of reporting
          fetch-depth: 0
       - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # with:
-        #     args: >
-        #          -Dsonar.organization=alex-corp
-        #          -Dsonar.projectKey=test
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
