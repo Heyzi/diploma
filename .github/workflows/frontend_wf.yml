@@ -8,7 +8,7 @@ name: CI\CD frontend
       - app/frontend/*
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Set env vars
         run: >
@@ -46,14 +46,18 @@ jobs:
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+      - name: Get AWS cluster name
+        run:  echo "cluster_name=$(aws eks list-clusters --output json | jq -r '.clusters[]')" >> $GITHUB_ENV
+        
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
+
       - name: Install and configure kubectl
         run: >
-          VERSION=$(curl --silent
-          https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+          VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-          curl
-          https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl
-          \
+          curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
               --progress-bar \
               --location \
               --remote-name
