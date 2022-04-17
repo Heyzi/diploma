@@ -14,38 +14,35 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 ## Main information
 
 - Dockerfile validated in [hadolint](https://github.com/hadolint/hadolint)
-- <info>
--  <info>
+- Code scanned by Sonar Cloud
+- Github 
+- Something else was made
 
 ---
 
 ## How to start
 #### Prerequirements:
-- terraform
-- aws cli
-- 1 user
+- [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+- [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [helm](https://helm.sh/docs/intro/install/)
 
-##### Deploy infractraction:
+#### Preparation:
+1. Create ECR repo
+2. Replace repo in k8s dir
+3. Launch workflow for building images
 
-1. Deploy eks:
+#### Initialization:
+1. Deploy eks cluster:
 ```sh
-cd infra/1_eks_cluster
+cd infra/0_eks_cluster
 terraform init
 ```
-2. Configure aws cli on workstation:
+2. Launch initialization script:
 ```sh
-aws configure
+./diploma_init.sh
 ```
-3. Configure eks on workstation: 
-```sh
-aws eks update-kubeconfig --region eu-central-1 --name epam_diploma-dev-cluster
-```
-3. Deploy Jenkins:
-```sh
-cd infra/2_jenkins/dev
-terraform init
-```
-4. Login and configure Jenkins
-```sh
-%url%:8080
-```
+3. At the end of the run, we get two links to the pro- and dev-versions of the application
+
+### CI\CD
+1. Configure secrets
+2. Configure sonar
