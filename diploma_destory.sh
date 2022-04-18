@@ -15,8 +15,8 @@ kubectl delete -f ./k8s/app --namespace prod 1>/dev/null &&
 echo "done"
 #
 echo "3. TF infra destroy"
-terraform -chdir=infra/0_eks_cluster plan
-terraform -chdir=infra/0_eks_cluster destroy -auto-approve
+terraform -chdir=infra/00_cluster plan
+terraform -chdir=infra/00_cluster destroy -auto-approve
 
 
 

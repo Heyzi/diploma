@@ -4,7 +4,7 @@ set -e
 #terraform -chdir=infra/1_eks_cluster plan
 #terraform -chdir=infra/1_eks_cluster apply -auto-approve
 echo "1. Getting the eks configuration..."
-aws eks update-kubeconfig --name epam-diploma-eks 1>/dev/null && 
+aws eks update-kubeconfig --name $(aws eks list-clusters | jq -r '.clusters[]') 1>/dev/null && 
 echo "done"
 
 #Creaing NS
