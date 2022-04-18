@@ -27,15 +27,33 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 - [helm](https://helm.sh/docs/intro/install/)
 
 #### Preparation:
-1. Create ECR repo
+1. Provide AWS Credentials 
+
+```sh
+aws configure
+```
+
+2. Create s3 bucket
+```sh
+aws s3 mb s3://%BUCKET_NAME% --region %REGION_NAME%
+```
+
 2. Replace repo in k8s dir
 3. Launch workflow for building images
 
 #### Initialization:
+0. Deploy database:
+```sh
+terraform -chdir=infra/1_db init
+terraform -chdir=infra/1_db plan
+terraform -chdir=infra/1_db apply -auto-approve
+```
+
 1. Deploy eks cluster:
 ```sh
-cd infra/0_eks_cluster
-terraform init
+terraform -chdir=infra/0_eks_cluster init
+terraform -chdir=infra/0_eks_cluster plan
+terraform -chdir=infra/0_eks_cluster apply -auto-approve
 ```
 2. Launch initialization script:
 ```sh
