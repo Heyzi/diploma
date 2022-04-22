@@ -62,12 +62,12 @@ jobs:
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
 
 
-      - name: Get AWS cluster name
-        run:  echo "cluster_name=$(aws eks list-clusters --output json | jq -r '.clusters[]')" >> $GITHUB_ENV
+      # - name: Get AWS cluster name
+      #   run:  echo "cluster_name=$(aws eks list-clusters --output json | jq -r '.clusters[]')" >> $GITHUB_ENV
         
 
-      - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
+      # - name: Update kubeconfig
+      #   run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
 
       # - name: Install and configure kubectl
       #   run: >
