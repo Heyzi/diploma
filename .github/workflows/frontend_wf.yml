@@ -24,11 +24,16 @@ jobs:
         with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Read frontend version
+        id: getversion
+        run: echo "::set-output name=version::$(cat app/frontend/front-release)"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -50,9 +55,12 @@ jobs:
           docker image build \
            --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest \
            --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+           --tag $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }} \
            app/frontend --no-cache
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
+
 
       - name: Get AWS cluster name
         run:  echo "cluster_name=$(aws eks list-clusters --output json | jq -r '.clusters[]')" >> $GITHUB_ENV
