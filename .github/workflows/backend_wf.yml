@@ -26,6 +26,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            
+      - name: Read backend version
+        id: getversion
+        run: echo "::set-output name=version::$(cat app/backend/pyapp-release)"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -46,20 +50,20 @@ jobs:
         run: |
           docker image build \
            --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest \
-           --tag $ECR_REGISTRY/$ECR_REPOSITORY:${{ secrets.MAJOR_DEV }}.${{ secrets.MINOR_DEV }} \
+           --tag $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }} \
            app/backend --no-cache
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ secrets.MAJOR_DEV }}.${{ secrets.MINOR_DEV }}
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
 
-      - name: Get AWS cluster name
-        run:  echo "cluster_name=$(aws eks list-clusters --output json | jq -r '.clusters[]')" >> $GITHUB_ENV
-      - name: Update Minor version
-        uses: hmanzur/actions-set-secret@v2.0.0
-        with:
-         name: 'MINOR'
-         value: $((${{ secrets.MINOR_DEV }}+1))
-         repository: Heyzi/diploma
-         token: ${{ secrets.REPO_ACCESS_TOKEN }}      
+      # - name: Get AWS cluster name
+      #   run:  echo "cluster_name=$(aws eks list-clusters --output json | jq -r '.clusters[]')" >> $GITHUB_ENV
+      # - name: Update Minor version
+      #   uses: hmanzur/actions-set-secret@v2.0.0
+      #   with:
+      #    name: 'MINOR'
+      #    value: $((${{ secrets.MINOR }}+1))
+      #    repository: Heyzi/MasterReport
+      #    token: ${{ secrets.REPO_ACCESS_TOKEN }}      
 
       # - name: Update kubeconfig
       #   run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
