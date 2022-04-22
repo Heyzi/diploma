@@ -46,14 +46,20 @@ jobs:
         run: |
           docker image build \
            --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest \
-           --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+           --tag $ECR_REGISTRY/$ECR_REPOSITORY:${{ secrets.MAJOR_DEV }}.${{ secrets.MINOR_DEV }} \
            app/backend --no-cache
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ secrets.MAJOR_DEV }}.${{ secrets.MINOR_DEV }}
 
       - name: Get AWS cluster name
         run:  echo "cluster_name=$(aws eks list-clusters --output json | jq -r '.clusters[]')" >> $GITHUB_ENV
-        
+      - name: Update Minor version
+        uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+         name: 'MINOR'
+         value: $((${{ secrets.MINOR_DEV }}+1))
+         repository: Heyzi/diploma
+         token: ${{ secrets.REPO_ACCESS_TOKEN }}      
 
-      - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
+      # - name: Update kubeconfig
+      #   run: aws eks update-kubeconfig --name ${{ env.cluster_name }}
