@@ -4,7 +4,5 @@ images:
 - name: /-frontend-diploma
   newName: /-frontend-diploma
   newTag: vHESOYAM4
-- name: httpd
-  newName: asdasd
 resources:
 - ../../../base/frontend
