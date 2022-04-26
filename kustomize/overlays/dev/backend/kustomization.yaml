@@ -3,6 +3,6 @@ kind: Kustomization
 namespace: dev
 images:
 - name: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-backend-diploma
-  newTag: "123"
+  newName: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-backend-diploma:''
 resources:
 - ../../../base/backend
