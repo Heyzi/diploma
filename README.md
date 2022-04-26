@@ -25,6 +25,7 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 - [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [helm](https://helm.sh/docs/intro/install/)
+- [argocd](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 
 #### Preparation:
 1. Provide AWS Credentials 

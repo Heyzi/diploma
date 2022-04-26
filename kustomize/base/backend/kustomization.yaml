@@ -1,0 +1,6 @@
+commonLabels:
+  app: pyapp
+resources:
+- deployment.yaml
+- service.yaml
+- hpa.yaml
