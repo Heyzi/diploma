@@ -5,7 +5,7 @@ name: CI\CD frontend
       - development
       - main
     paths:
-      - kustomize/overlay/dev/frontend
+      - app/frontend/front-release
 jobs:
   build:
     runs-on: ubuntu-latest
