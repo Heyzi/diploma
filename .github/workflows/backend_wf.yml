@@ -87,7 +87,7 @@ jobs:
 
     - name: Read backend version
       id: getversion
-      run: echo "::set-output name=version::$(cat app/backend/front-release)"
+      run: echo "::set-output name=version::$(cat app/backend/pyapp-release)"
 
     - name: Update Kubernetes resources
       env:
@@ -97,9 +97,7 @@ jobs:
       run: |
        echo ${{ steps.getversion.outputs.version }}
        cd kustomize/overlays/dev/backend
-       kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:\"${{ steps.getversion.outputs.version }}\"
-       kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:"${{ steps.getversion.outputs.version }}"
-       kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:\'"${{ steps.getversion.outputs.version }}"\'
+       kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }}
        cat kustomization.yaml
         
     - name: Commit files
