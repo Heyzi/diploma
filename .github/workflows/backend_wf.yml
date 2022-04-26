@@ -5,7 +5,7 @@ name: CI\CD backend
       - development
       - main
     paths:
-      - app/frontend/pyapp-release
+      - app/backend/pyapp-release
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
