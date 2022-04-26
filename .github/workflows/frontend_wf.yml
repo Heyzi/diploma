@@ -102,7 +102,7 @@ jobs:
         ECR_REPOSITORY: '${{ env.namespace }}-frontend-diploma'
         IMAGE_TAG: '${{ env.GITHUB_SHA_SHORT }}'
       run: |
-       cd kustomize/overlays/dev/frontend
+       cd kustomize/overlays/${{ env.namespace }}/frontend
        kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
        cat kustomization.yaml
         
