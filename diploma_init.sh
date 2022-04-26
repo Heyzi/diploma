@@ -37,13 +37,16 @@ echo "done"
 
 #install in dev namespace
 echo "5. Deploy app in dev namespace..."
-kubectl apply -f ./k8s/app --namespace dev 1>/dev/null && 
+kustomize build kustomize/overlays/dev/frontend | kubectl apply -f -
+kustomize build kustomize/overlays/dev/backend | kubectl apply -f -
+#ubectl apply -f ./k8s/app --namespace dev 1>/dev/null && 
 echo "done"
 
-#install in prod namespace
-echo "5. Deploy app in prod namespace..."
-kubectl apply -f ./k8s/app --namespace prod 1>/dev/null && 
-echo "done"
+# #install in prod namespace
+# echo "5. Deploy app in prod namespace..."
+# kustomize build . | kubectl apply -f -
+# kubectl apply -f ./k8s/app --namespace prod 1>/dev/null && 
+# echo "done"
 
 #Wainting for elb address:
 echo "6. Waiting for elb address..."
