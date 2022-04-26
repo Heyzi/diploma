@@ -24,17 +24,20 @@ jobs:
         with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
          fetch-depth: 0
-
+    
+      #Sonar
       # - name: SonarCloud Scan
       #   uses: SonarSource/sonarcloud-github-action@master
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
+      
+      #Frontend verion from file
       - name: Read frontend version
         id: getversion
         run: echo "::set-output name=version::$(cat app/frontend/front-release)"
-
+      
+      #aws
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -84,6 +87,10 @@ jobs:
           aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
           aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
           aws-region: '${{ secrets.MY_AWS_REGION }}'
+ 
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
 
     - name: Read frontend version
       id: getversion
