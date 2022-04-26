@@ -7,7 +7,7 @@ name: CI\CD frontend
     paths:
       - app/frontend/*
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Set env vars
@@ -60,6 +60,36 @@ jobs:
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Setup Kustomize
+      uses: imranismail/setup-kustomize@v1
+
+    - name: Update Kubernetes resources
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: |
+       cd kustomize/overlay/dev/frontend
+       kustomize edit set image httpd=$ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
+       cat kustomization.yaml
+        
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Bump docker tag"
+        
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
 
       # - name: Get AWS cluster name
