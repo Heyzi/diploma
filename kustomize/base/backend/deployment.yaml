@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyapp
+spec:
+  selector:
+    matchLabels:
+      app: pyapp
+  template:
+    metadata:
+      labels:
+        app: pyapp
+    spec:
+      containers:
+        - name: pyapp
+          image: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-backend-diploma:latest
+          ports:
+            - containerPort: 5555
+          livenessProbe:
+            tcpSocket:
+              port: 5555
+            initialDelaySeconds: 15
+            periodSeconds:  15
+          readinessProbe:
+            tcpSocket:
+              port: 5555
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 150m
+              memory: 300Mi

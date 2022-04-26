@@ -14,38 +14,70 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 ## Main information
 
 - Dockerfile validated in [hadolint](https://github.com/hadolint/hadolint)
-- <info>
--  <info>
+- Code scanned by Sonar Cloud
+- Github 
+- Something else was made
 
 ---
 
 ## How to start
 #### Prerequirements:
-- terraform
-- aws cli
-- 1 user
+- [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+- [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [Kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/)
+- [argocd](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 
-##### Deploy infractraction:
+### Preparation:
+1. Provide AWS Credentials 
 
-1. Deploy eks:
-```sh
-cd infra/1_eks_cluster
-terraform init
-```
-2. Configure aws cli on workstation:
 ```sh
 aws configure
 ```
-3. Configure eks on workstation: 
+
+2. Create s3 bucket
 ```sh
-aws eks update-kubeconfig --region eu-central-1 --name epam_diploma-dev-cluster
+aws s3 mb s3://%BUCKET_NAME% --region %REGION_NAME%
 ```
-3. Deploy Jenkins:
+
+2. Replace repo in k8s dir
+3. Launch workflow for building images
+
+---
+
+### Initialization:
+1. Deploy cluster and database (~12 min):
 ```sh
-cd infra/2_jenkins/dev
-terraform init
+terraform -chdir=infra/00_cluster init
+terraform -chdir=infra/00_cluster plan
+terraform -chdir=infra/00_cluster apply -auto-approve
 ```
-4. Login and configure Jenkins
+
+2. Launch initialization script (~3 min):
 ```sh
-%url%:8080
+./diploma_init.sh
 ```
+3. At the end of the run this script, we get this inforamtion:
+
+- "DEV Application url:" %url%
+- "PROD Application url:" %url%
+- "Grafana URL:" "http://localhost:3000/"
+- "ARGOCD URL:" "http://localhost:8080/"
+- "ARGOCD PASSWD:" %passwd%
+
+---
+
+### CI\CD
+1. Configure secrets:
+
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- MY_AWS_REGION
+- SONAR_TOKEN
+
+2. Configure sonarcloud
+https://github.com/SonarSource/sonarcloud-github-action
+
+3. Configure argocd
+- http://localhost:8080/
+
+4. ✨Suffer✨

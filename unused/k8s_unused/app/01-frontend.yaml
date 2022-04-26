@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpd
+  template:
+    metadata:
+      labels:
+        app: httpd
+    spec:
+      containers:
+        - name: httpd
+          image: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-frontend-diploma:latest
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds:  15
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 250m
+              memory: 300Mi
