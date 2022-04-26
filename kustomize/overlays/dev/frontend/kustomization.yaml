@@ -1,12 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: dev
 images:
-- name: /-frontend-diploma
-  newName: /-frontend-diploma
-  newTag: vHESOYAM4
-- name: /dev-frontend-diploma
-  newName: /dev-frontend-diploma
-  newTag: vHESOYAM5
 - name: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-frontend-diploma
   newName: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-frontend-diploma
   newTag: vHESOYAM6
