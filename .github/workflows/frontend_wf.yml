@@ -66,11 +66,24 @@ jobs:
     needs: build
 
     steps:
+    - name: Set env vars
+      run: >
+          if [ $GITHUB_REF_NAME = 'main' ]
+            then echo "namespace=prod" >> $GITHUB_ENV
+            else echo "namespace=dev" >> $GITHUB_ENV
+          fi
     - name: Check out code
       uses: actions/checkout@v2
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+          aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
+          aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+          aws-region: '${{ secrets.MY_AWS_REGION }}'
 
     - name: Read frontend version
       id: getversion
