@@ -1,6 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
+- name: /-frontend-diploma
+  newName: /-frontend-diploma
+  newTag: vHESOYAM4
 - name: httpd
   newName: asdasd
 resources:
