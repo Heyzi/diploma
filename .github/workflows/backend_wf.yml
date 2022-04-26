@@ -52,11 +52,11 @@ jobs:
           docker image build \
            --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest \
            --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-           --tag $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }} \
+           --tag $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }} \
            app/backend --no-cache
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-           docker push $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }}
   configure:
     runs-on: ubuntu-latest
     needs: build
