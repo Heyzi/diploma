@@ -95,8 +95,11 @@ jobs:
         ECR_REPOSITORY: '${{ env.namespace }}-backend-diploma'
         IMAGE_TAG: '${{ env.GITHUB_SHA_SHORT }}'
       run: |
+       echo ${{ steps.getversion.outputs.version }}
        cd kustomize/overlays/dev/backend
        kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:\"${{ steps.getversion.outputs.version }}\"
+       kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:"${{ steps.getversion.outputs.version }}"
+       kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:\'"${{ steps.getversion.outputs.version }}"\'
        cat kustomization.yaml
         
     - name: Commit files
