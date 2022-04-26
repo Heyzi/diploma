@@ -76,7 +76,7 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: |
-       cd kustomize/overlay/dev/frontend
+       cd kustomize/overlays/dev/frontend
        kustomize edit set image httpd=$ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
        cat kustomization.yaml
         
@@ -85,7 +85,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git commit -am "Bump docker tag"
-        
+
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
