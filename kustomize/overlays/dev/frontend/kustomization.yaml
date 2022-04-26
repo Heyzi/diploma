@@ -7,5 +7,8 @@ images:
 - name: /dev-frontend-diploma
   newName: /dev-frontend-diploma
   newTag: vHESOYAM5
+- name: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-frontend-diploma
+  newName: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-frontend-diploma
+  newTag: vHESOYAM6
 resources:
 - ../../../base/frontend
