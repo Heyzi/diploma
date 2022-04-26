@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, flash
 from db import user_select
 import time
 import os
+import socket
 from backend import userdate_weather_to_db
 
 app = Flask(__name__)
@@ -14,7 +15,7 @@ def index():
       date = time.strftime("%Y-%m")
       result = user_select(time.strftime("%Y-%m"))
 
-      return render_template("index.html", data=result, cur_month=date)
+      return render_template("index.html", data=result, cur_month=date, hostname=socket.gethostname())
     else:
       userdate = request.form["update_month"]
       if request.form['action'] == 'update':
@@ -26,14 +27,15 @@ def index():
           else:
               showmodal=False
               result2 = user_select(userdate)
-
       else:
        showmodal=False
        user_select(userdate)
        result2 = user_select(userdate)
        if not result2:
          showmodal=True
-    return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal)
+       if request.form['action'] == 'stress':
+           os.system("stress.py")
+    return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal, hostname=socket.gethostname())
 
 @app.errorhandler(500)
 def internal_error(error):
