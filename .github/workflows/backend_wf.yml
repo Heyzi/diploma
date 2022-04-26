@@ -7,7 +7,7 @@ name: CI\CD backend
     paths:
       - app/backend/pyapp-release
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Set env vars
