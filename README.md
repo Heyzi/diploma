@@ -24,10 +24,10 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 #### Prerequirements:
 - [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-- [helm](https://helm.sh/docs/intro/install/)
+- [Kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/)
 - [argocd](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 
-#### Preparation:
+### Preparation:
 1. Provide AWS Credentials 
 
 ```sh
@@ -42,26 +42,42 @@ aws s3 mb s3://%BUCKET_NAME% --region %REGION_NAME%
 2. Replace repo in k8s dir
 3. Launch workflow for building images
 
-#### Initialization:
-0. Deploy database:
+---
+
+### Initialization:
+1. Deploy cluster and database (~12 min):
 ```sh
-terraform -chdir=infra/1_db init
-terraform -chdir=infra/1_db plan
-terraform -chdir=infra/1_db apply -auto-approve
+terraform -chdir=infra/00_cluster init
+terraform -chdir=infra/00_cluster plan
+terraform -chdir=infra/00_cluster apply -auto-approve
 ```
 
-1. Deploy eks cluster:
-```sh
-terraform -chdir=infra/0_eks_cluster init
-terraform -chdir=infra/0_eks_cluster plan
-terraform -chdir=infra/0_eks_cluster apply -auto-approve
-```
-2. Launch initialization script:
+2. Launch initialization script (~3 min):
 ```sh
 ./diploma_init.sh
 ```
-3. At the end of the run, we get two links to the pro- and dev-versions of the application
+3. At the end of the run this script, we get this inforamtion:
+
+- "DEV Application url:" %url%
+- "PROD Application url:" %url%
+- "Grafana URL:" "http://localhost:3000/"
+- "ARGOCD URL:" "http://localhost:8080/"
+- "ARGOCD PASSWD:" %passwd%
+
+---
 
 ### CI\CD
-1. Configure secrets
-2. Configure sonar
+1. Configure secrets:
+
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- MY_AWS_REGION
+- SONAR_TOKEN
+
+2. Configure sonarcloud
+https://github.com/SonarSource/sonarcloud-github-action
+
+3. Configure argocd
+- http://localhost:8080/
+
+4. ✨Suffer✨

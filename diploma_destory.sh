@@ -6,12 +6,12 @@ set -e
 
 #delete in dev namespace
 echo "1. Delete app in dev namespace..."
-kubectl delete -f ./k8s/app --namespace dev 1>/dev/null && 
+kubectl delete svc httpd -n dev 1>/dev/null && 
 echo "done"
 
 #deelte in prod namespace
 echo "2. Delete app in prod namespace..."
-kubectl delete -f ./k8s/app --namespace prod 1>/dev/null && 
+kubectl delete svc httpd -n prod 1>/dev/null && 
 echo "done"
 #
 echo "3. TF infra destroy"
