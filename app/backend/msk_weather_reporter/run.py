@@ -4,6 +4,7 @@ from db import user_select
 import time
 import os
 import socket
+import math
 from backend import userdate_weather_to_db
 
 app = Flask(__name__)
@@ -34,7 +35,9 @@ def index():
        if not result2:
          showmodal=True
        if request.form['action'] == 'stress':
-           os.system("stress.py")
+          while True:
+           math.factorial(50)  
+
     return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal, hostname=socket.gethostname())
 
 @app.errorhandler(500)
