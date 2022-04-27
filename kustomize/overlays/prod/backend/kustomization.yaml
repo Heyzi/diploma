@@ -4,6 +4,6 @@ namespace: prod
 images:
 - name: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/prod-backend-diploma
   newName: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/prod-backend-diploma
-  newTag: 1.0.15
+  newTag: 1.0.16
 resources:
 - ../../../base/backend
