@@ -9,6 +9,8 @@ module "eks" {
   eks_managed_node_group_defaults = {
     disk_size      = 10
     instance_types = ["t3.medium", "t3.small"]
+    enable_monitoring       = true
+
   }
 
   eks_managed_node_groups = {
@@ -20,6 +22,8 @@ module "eks" {
 
       instance_types = ["t3.medium"]
       capacity_type  = "SPOT"
+      enable_monitoring       = true
+
     }
   }
  cluster_security_group_additional_rules = {
