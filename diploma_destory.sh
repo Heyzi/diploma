@@ -6,17 +6,17 @@ set -e
 
 #delete in dev namespace
 echo "1. Delete app in dev namespace..."
-kubectl delete svc httpd -n dev 1>/dev/null && 
+kustomize build kustomize/overlays/dev/frontend | kubectl delete -f - 1>/dev/null && 
 echo "done"
 
-#deelte in prod namespace
+#delete in prod namespace
 echo "2. Delete app in prod namespace..."
-kubectl delete svc httpd -n prod 1>/dev/null && 
+kustomize build kustomize/overlays/prod/frontend | kubectl apply -f -  1>/dev/null && 
 echo "done"
 #
 echo "3. TF infra destroy"
-terraform -chdir=infra/00_cluster plan
-terraform -chdir=infra/00_cluster destroy -auto-approve
+terraform -chdir=infra/01_eks_cluster plan
+terraform -chdir=infra/01_eks_cluster destroy -auto-approve
 
 
 

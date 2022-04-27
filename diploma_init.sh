@@ -30,27 +30,28 @@ echo "done"
 #install argocd
 echo "4. Installing argocd in k8s..."
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml 1>/dev/null
-#kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}' 1>/dev/null && 
+##kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}' 1>/dev/null && 
 echo "done"
 
 #install metric server
 echo "5. Installing metric server k8s..."
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml --namespace=kube-system 1>/dev/null 
 kubectl patch deployment metrics-server -n kube-system --type 'json' -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml --namespace=kube-system 1>/dev/null && 
 echo "done"
 
 #install in dev namespace
 echo "6. Deploy app in dev namespace..."
 kustomize build kustomize/overlays/dev/frontend | kubectl apply -f -
 kustomize build kustomize/overlays/dev/backend | kubectl apply -f -
-#ubectl apply -f ./k8s/app --namespace dev 1>/dev/null && 
+
+##kubectl apply -f ./k8s/app --namespace dev 1>/dev/null && 
 echo "done"
 
-# #install in prod namespace
-# echo "7. Deploy app in prod namespace..."
-# kustomize build . | kubectl apply -f -
-# kubectl apply -f ./k8s/app --namespace prod 1>/dev/null && 
-# echo "done"
+#install in prod namespace
+echo "7. Deploy app in prod namespace..."
+kustomize build kustomize/overlays/prod/frontend | kubectl apply -f -
+kustomize build kustomize/overlays/prod/backend | kubectl apply -f - && 
+echo "done"
 
 #Wainting for elb address:
 echo "8. Waiting for elb address..."
@@ -63,7 +64,7 @@ kubectl port-forward -n argocd svc/argocd-server  8080:443 &
 #echo "ARGOCD url:" "$(kubectl get svc argocd-server -n argocd -o jsonpath="{.status.loadBalancer.ingress[*].hostname}")"
 
 echo "DEV Application url:" "$(kubectl get svc httpd -n dev -o  jsonpath="{.status.loadBalancer.ingress[*].hostname}")"
-#echo "PROD Application url:" "$(kubectl get svc httpd -n prod -o  jsonpath="{.status.loadBalancer.ingress[*].hostname}")" 
+echo "PROD Application url:" "$(kubectl get svc httpd -n prod -o  jsonpath="{.status.loadBalancer.ingress[*].hostname}")" 
 echo "Grafana URL:" "http://localhost:3000/"
 echo "ARGOCD URL:" "http://localhost:8080/"
 echo "ARGOCD PASSWD:" "$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)"

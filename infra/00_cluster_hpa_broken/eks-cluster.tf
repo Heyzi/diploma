@@ -10,6 +10,7 @@ module "eks" {
     disk_size      = 10
     instance_types = ["t3.medium", "t3.small"]
     enable_monitoring       = true
+    iam_role_attach_cni_policy = true
 
   }
 
@@ -23,6 +24,7 @@ module "eks" {
       instance_types = ["t3.medium"]
       capacity_type  = "SPOT"
       enable_monitoring       = true
+      iam_role_attach_cni_policy = true
 
     }
   }
@@ -36,7 +38,16 @@ module "eks" {
       source_node_security_group = true
     }
   }
-
+cluster_addons = {
+    coredns = {
+      resolve_conflicts = "OVERWRITE"
+    }
+    kube-proxy = {}
+    vpc-cni = {
+      resolve_conflicts        = "OVERWRITE"
+      service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
+    }
+  }
   # Extend node-to-node security group rules
   node_security_group_additional_rules = {
     ingress_self_all = {
@@ -65,4 +76,20 @@ data "aws_eks_cluster" "cluster" {
 
 data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
+}
+
+module "vpc_cni_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 4.12"
+
+  role_name_prefix      = "VPC-CNI-IRSA"
+  attach_vpc_cni_policy = true
+  vpc_cni_enable_ipv6   = true
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:aws-node"]
+    }
+  }
 }
