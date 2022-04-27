@@ -99,6 +99,7 @@ jobs:
        echo ${{ steps.getversion.outputs.version }}
        cd kustomize/overlays/${{ env.namespace }}/backend
        kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }}
+       kustomize edit set namespace ${{ env.namespace }}
        cat kustomization.yaml
         
     - name: Commit files
