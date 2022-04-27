@@ -18,9 +18,12 @@ echo "done"
 #insall prometheus and grafana
 echo "3. Installing prometheus and grafana k8s..."
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 1>/dev/null
+#loki
+helm repo add grafana https://grafana.github.io/helm-charts  1>/dev/null
 helm repo add stable https://charts.helm.sh/stable 1>/dev/null
 helm repo update 1>/dev/null 
 
+helm upgrade --install loki grafana/loki-stack --namespace mon 1>/dev/null 
 helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace mon 1>/dev/null && 
 echo "done"
 
