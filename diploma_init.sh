@@ -16,7 +16,7 @@ kubectl create namespace mon 1>/dev/null &&
 echo "done"
 
 #insall prometheus and grafana
-echo "3. Installing prometheus and grafana k8s..."
+echo "3. Installing prometheus, grafana..."
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 1>/dev/null
 #loki
 helm repo add grafana https://grafana.github.io/helm-charts  1>/dev/null
@@ -41,16 +41,16 @@ echo "done"
 
 #install in dev namespace
 echo "6. Deploy app in dev namespace..."
-kustomize build kustomize/overlays/dev/frontend | kubectl apply -f -
-kustomize build kustomize/overlays/dev/backend | kubectl apply -f -
+kustomize build kustomize/overlays/dev/frontend | kubectl apply -f - 1>/dev/null 
+kustomize build kustomize/overlays/dev/backend | kubectl apply -f - 1>/dev/null 
 
 ##kubectl apply -f ./k8s/app --namespace dev 1>/dev/null && 
 echo "done"
 
 #install in prod namespace
 echo "7. Deploy app in prod namespace..."
-kustomize build kustomize/overlays/prod/frontend | kubectl apply -f -
-kustomize build kustomize/overlays/prod/backend | kubectl apply -f - && 
+kustomize build kustomize/overlays/prod/frontend | kubectl apply -f - 1>/dev/null 
+kustomize build kustomize/overlays/prod/backend | kubectl apply -f -  1>/dev/null 
 echo "done"
 
 #Wainting for elb address:
