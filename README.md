@@ -13,10 +13,9 @@ Using API https://www.metaweather.com/api/ get data about weather in Moscow for 
 
 ## Main information
 
+- THE SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY. THE DEVELOPER IS NOT RESPONSIBLE FOR ANY SUFFERING DURING THE OPERATION OF THIS PRODUCT. 
 - Dockerfile validated in [hadolint](https://github.com/hadolint/hadolint)
 - Code scanned by Sonar Cloud
-- Github 
-- Something else was made
 
 ---
 
@@ -39,17 +38,38 @@ aws configure
 aws s3 mb s3://%BUCKET_NAME% --region %REGION_NAME%
 ```
 
-2. Replace repo in k8s dir
-3. Launch workflow for building images
+3. Replace s3 bucket in infra/01_eks_cluster/backend.tf
+
+4. Create ECR repo
+
+```sh
+aws ecr create-repository  --repository-name frontend-diploma
+aws ecr create-repository  --repository-name backend-diploma
+```
+
+5. Replace ECR repo names(if name changed) in .github/workflows/*
+ECR_REPOSITORY
+
+6. Configure secrets in github action:
+
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- MY_AWS_REGION
+- SONAR_TOKEN
+
+7. Configure sonarcloud
+https://github.com/SonarSource/sonarcloud-github-action
+
+8. Launch workflow for building first images
 
 ---
 
 ### Initialization:
-1. Deploy cluster and database (~12 min):
+1. Deploy cluster and database (~15 min):
 ```sh
-terraform -chdir=infra/00_cluster init
-terraform -chdir=infra/00_cluster plan
-terraform -chdir=infra/00_cluster apply -auto-approve
+terraform -chdir=infra/01_eks_cluster init
+terraform -chdir=infra/01_eks_cluster plan
+terraform -chdir=infra/01_eks_cluster apply -auto-approve
 ```
 
 2. Launch initialization script (~3 min):
@@ -66,18 +86,8 @@ terraform -chdir=infra/00_cluster apply -auto-approve
 
 ---
 
-### CI\CD
-1. Configure secrets:
-
-- AWS_ACCESS_KEY_ID
-- AWS_SECRET_ACCESS_KEY
-- MY_AWS_REGION
-- SONAR_TOKEN
-
-2. Configure sonarcloud
-https://github.com/SonarSource/sonarcloud-github-action
-
-3. Configure argocd
+### CD
+1. Configure argocd
 - http://localhost:8080/
 
-4. ✨Suffer✨
+2. ✨Suffer again✨
