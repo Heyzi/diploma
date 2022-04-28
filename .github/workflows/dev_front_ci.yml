@@ -1,12 +1,10 @@
-name: CI\CD backend
+name: Dev backend CI
 'on':
   push:
     branches:
       - development
-      - main
     paths:
-
-      - app/backend/pyapp-release
+      - app/frontend/front-release
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,17 +20,25 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@v2
-
+        with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+         fetch-depth: 0
+    
+      #Sonar
       # - name: SonarCloud Scan
       #   uses: SonarSource/sonarcloud-github-action@master
-      #   env:
+      #     with:
+      #         projectBaseDir: my-custom-directory
+      #     env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            
-      - name: Read backend version
+      
+      #Frontend verion from file
+      - name: Read frontend version
         id: getversion
-        run: echo "::set-output name=version::$(cat app/backend/pyapp-release)"
-
+        run: echo "::set-output name=version::$(cat app/frontend/front-release)"
+      
+      #aws
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -47,18 +53,18 @@ jobs:
       - name: 'Build, tag, and push image to Amazon ECR'
         env:
           ECR_REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
-          ECR_REPOSITORY: '${{ env.namespace }}-backend-diploma'
+          ECR_REPOSITORY: 'frontend-diploma'
           IMAGE_TAG: '${{ env.GITHUB_SHA_SHORT }}'
         run: |
           docker image build \
            --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest \
            --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-           --tag $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }} \
-           app/backend --no-cache
+           --tag $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }} \
+           app/frontend --no-cache
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }}
-           
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
+
   configure:
     runs-on: ubuntu-latest
     needs: build
@@ -76,30 +82,29 @@ jobs:
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-          aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-          aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-          aws-region: '${{ secrets.MY_AWS_REGION }}'
+    # - name: Configure AWS credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #       aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
+    #       aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+    #       aws-region: '${{ secrets.MY_AWS_REGION }}'
  
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+    # - name: Login to Amazon ECR
+    #   id: login-ecr
+    #   uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Read backend version
+    - name: Read frontend version
       id: getversion
-      run: echo "::set-output name=version::$(cat app/backend/pyapp-release)"
+      run: echo "::set-output name=version::$(cat app/frontend/front-release)"
 
     - name: Update Kubernetes resources
       env:
         ECR_REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
-        ECR_REPOSITORY: '${{ env.namespace }}-backend-diploma'
+        ECR_REPOSITORY: 'frontend-diploma'
         IMAGE_TAG: '${{ env.GITHUB_SHA_SHORT }}'
       run: |
-       echo ${{ steps.getversion.outputs.version }}
-       cd kustomize/overlays/${{ env.namespace }}/backend
-       kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }}
+       cd kustomize/overlays/${{ env.namespace }}/frontend
+       kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:v${{ steps.getversion.outputs.version }}
        kustomize edit set namespace ${{ env.namespace }}
        cat kustomization.yaml
         
