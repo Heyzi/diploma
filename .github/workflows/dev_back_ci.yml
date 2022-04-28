@@ -91,12 +91,12 @@ jobs:
 
     - name: Update Kubernetes resources
       env:
-        ECR_REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
+        ECR_REGISTRY: '035604165710.dkr.ecr.eu-central-1.amazonaws.com'
         ECR_REPOSITORY: 'backend-diploma'
-        IMAGE_TAG: '${{ env.GITHUB_SHA_SHORT }}'
       run: |
        echo ${{ steps.getversion.outputs.version }}
        cd kustomize/overlays/${{ env.namespace }}/backend
+       # kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }}
        kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.getversion.outputs.version }}
        kustomize edit set namespace ${{ env.namespace }}
        cat kustomization.yaml
