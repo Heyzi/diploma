@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from backend import weather_for_every_day, weather_to_db
 
 def list_dates():
-    start_date = date(2020, 5, 31)
+    start_date = date(2022, 1, 31)
     end_date = date.today()
 
     delta = end_date - start_date
