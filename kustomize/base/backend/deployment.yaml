@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: pyapp
-          image: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/dev-backend-diploma:latest
+          image: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/backend-diploma:latest
           ports:
             - containerPort: 5555
           livenessProbe:
