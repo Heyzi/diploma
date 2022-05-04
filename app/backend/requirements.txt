@@ -1,3 +1,9 @@
 Flask
 requests
 python-dateutil
+psutil
+mock
+pytest
+flake8
+tox
+cpu-load-generator

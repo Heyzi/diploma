@@ -6,6 +6,7 @@ import os
 import socket
 import math
 from backend import userdate_weather_to_db
+from cpu_load_generator import load_single_core, load_all_cores, from_profile
 
 app = Flask(__name__)
 
@@ -35,8 +36,10 @@ def index():
        if not result2:
          showmodal=True
        if request.form['action'] == 'stress':
-          while True:
-           math.factorial(50)  
+         load_all_cores(duration_s=15, target_load=0.9)
+        # os.system("python -m cpu_load_generator -l 0.8 -d 5 -c -1")
+          # while True:
+          #  math.factorial(50)  
 
     return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal, hostname=socket.gethostname())
 

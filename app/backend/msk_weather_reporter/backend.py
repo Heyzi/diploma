@@ -7,6 +7,7 @@ from db import insert_to_table, create_db
 from requests.exceptions import HTTPError
 import dateutil.parser
 
+
 create_db()
 
 def find_all_month_date():
