@@ -37,21 +37,21 @@ spec:
           - name: DBHOST
             valueFrom:
               secretKeyRef:
-                name: DBHOST
+                name: config
                 key: DBHOST
           - name: DBPASSWD
             valueFrom:
               secretKeyRef:
-                name: DBPASSWD
+                name: config
                 key: DBPASSWD
           - name: DB_NAME
             valueFrom:
               secretKeyRef:
-                name: DB_NAME
+                name: config
                 key: DB_NAME
           - name: DBUSER
             valueFrom:
               secretKeyRef:
-                name: DBUSER
+                name: config
                 key: DBUSER
           

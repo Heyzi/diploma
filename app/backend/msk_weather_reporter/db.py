@@ -1,43 +1,101 @@
 #!/usr/bin/python3
-import sqlite3
+import mysql.connector
+from mysql.connector import errorcode
+import os
 
-dbfile = "weather.db"
-    
+DB_NAME = 'mypyapp1'
+
+cnx = mysql.connector.connect(
+  host=os.getenv('DBHOST'),
+  user=os.getenv('DBUSER'),
+  passwd=os.getenv('DBPASSWD'),
+)
+
 def create_db():
-    conn = sqlite3.connect(dbfile)
-    c = conn.cursor()
-    c.execute("""CREATE TABLE IF NOT EXISTS weather (
-                                        id integer,
-                                        weather_state_name text,
-                                        weather_state_abbr text,
-                                        wind_direction_compass text,
-                                        created text,
-                                        applicable_date text PRIMARY KEY,
-                                        min_temp integer,
-                                        max_temp integer,
-                                        the_temp integer)""")
+    cursor = cnx.cursor()
+    
 
-    conn.commit()
-    conn.close()
+    TABLES = {}
+    TABLES['weather'] = (
+        "CREATE TABLE `weather` ("
+        "  `id` int(11) NOT NULL,"
+        "  `weather_state_name` varchar(8),"
+        "  `weather_state_abbr` varchar(8),"
+        "  `wind_direction_compass` varchar(8),"
+        "  `created` date,"
+        "  `applicable_date` date NOT NULL,"
+        "  `min_temp` varchar(8),"
+        "  `max_temp` varchar(8),"
+        "  `the_temp` varchar(8),"
+        "  PRIMARY KEY (`applicable_date`)"
+        ") ENGINE=InnoDB")
+
+
+    def create_database(cursor):
+        try:
+            cursor.execute(
+                "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(DB_NAME))
+        except mysql.connector.Error as err:
+            print("Failed creating database: {}".format(err))
+            exit(1)
+
+    try:
+        cursor.execute("USE {}".format(DB_NAME))
+    except mysql.connector.Error as err:
+        print("Database {} does not exists.".format(DB_NAME))
+        if err.errno == errorcode.ER_BAD_DB_ERROR:
+            create_database(cursor)
+            print("Database {} created successfully.".format(DB_NAME))
+            cnx.database = DB_NAME
+        else:
+            print(err)
+            exit(1)
+
+    for table_name in TABLES:
+        table_description = TABLES[table_name]
+        try:
+            print("Creating table {}: ".format(table_name), end='')
+            cursor.execute(table_description)
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
+                print("already exists.")
+            else:
+                print(err.msg)
+        else:
+            print("OK")
+
+    cursor.close()
 
 def insert_to_table(most_consensus_monthly):
-    conn = sqlite3.connect(dbfile)
-    c = conn.cursor()
-    c.execute("INSERT OR REPLACE INTO weather VALUES (?,?,?,?,?,?,?,?,?)", [most_consensus_monthly["id"], most_consensus_monthly["weather_state_name"], most_consensus_monthly["weather_state_abbr"], most_consensus_monthly["wind_direction_compass"], most_consensus_monthly["created"], most_consensus_monthly["applicable_date"], most_consensus_monthly["min_temp"], most_consensus_monthly["max_temp"], most_consensus_monthly["the_temp"]])
-    conn.commit()
-    conn.close()
+    columns = ', '.join("`" + str(x).replace('/', '_') + "`" for x in most_consensus_monthly.keys())
+    values = ', '.join("'" + str(x).replace('/', '_') + "'" for x in most_consensus_monthly.values())
+    sql = "REPLACE INTO %s ( %s ) VALUES ( %s );" % ('weather', columns, values)
+    print(sql)
+    cnx.database = DB_NAME
+    cursor = cnx.cursor()
+    cursor.execute(sql)
+    cnx.commit()
+    cursor.close()
 
 def select_all():
-    conn = sqlite3.connect(dbfile)
-    c = conn.cursor()
-    result = c.execute('SELECT * FROM weather ORDER BY applicable_date ASC').fetchall()
-    conn.close()
+    cnx.database = DB_NAME
+    cursor = cnx.cursor()
+    cursor.execute('SELECT * FROM weather ORDER BY applicable_date ASC')
+    result = cursor.fetchall()
+    print(result)
+    cursor.close()
+    # cnx.close()
     return(result)
 
 def user_select(userdate):
-    date=userdate
-    conn = sqlite3.connect(dbfile)
-    c = conn.cursor()
-    result = c.execute("SELECT * FROM weather WHERE strftime('%Y-%m', applicable_date) = ? ORDER BY applicable_date ASC", (date,)).fetchall()
-    conn.close()
+    cnx.database = DB_NAME
+    cursor = cnx.cursor()
+    print(userdate)
+    sql = 'SELECT * FROM weather WHERE DATE_FORMAT(applicable_date,"%Y-%m") = %s ORDER BY applicable_date ASC'
+    cursor.execute(sql, (userdate,))
+    result = cursor.fetchall()
+    print(result)
+    cursor.close()
+    # cnx.close()
     return(result)
+

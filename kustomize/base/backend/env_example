@@ -1,4 +1,4 @@
-DBHOST = ''
-DBUSER = 'mypyapp1'
-DBPASSWD = 'mypyapp1'
-DB_NAME = 'mypyapp1'
+DBHOST='mypyapp2.casda.eu-central-1.rds.amazonaws.com'
+DBUSER='mypyapp1'
+DBPASSWD='mypyapp1'
+DB_NAME='mypyapp1'
