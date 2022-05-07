@@ -33,3 +33,25 @@ spec:
             limits:
               cpu: 150m
               memory: 300Mi
+          env:
+          - name: DBHOST
+            valueFrom:
+              secretKeyRef:
+                name: DBHOST
+                key: DBHOST
+          - name: DBPASSWD
+            valueFrom:
+              secretKeyRef:
+                name: DBPASSWD
+                key: DBPASSWD
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: DB_NAME
+                key: DB_NAME
+          - name: DBUSER
+            valueFrom:
+              secretKeyRef:
+                name: DBUSER
+                key: DBUSER
+          

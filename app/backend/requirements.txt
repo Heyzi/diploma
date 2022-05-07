@@ -7,3 +7,4 @@ pytest
 flake8
 tox
 cpu-load-generator
+mysql-connector-python

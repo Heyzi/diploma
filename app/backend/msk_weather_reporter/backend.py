@@ -80,6 +80,7 @@ def userdate_weather_to_db(userdate):
            insert_to_table(most_consensus_monthly)
 
 if __name__ == "__main__":
+  create_db()
   while 1:
       weather_to_db()
   
