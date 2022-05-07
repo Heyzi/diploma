@@ -74,6 +74,10 @@ terraform -chdir=infra/01_eks_cluster apply -auto-approve
 
 2. Launch initialization script (~3 min):
 ```sh
+Fullfill DB information:
+env_dev
+env_prod
+
 ./diploma_init.sh
 ```
 3. At the end of the run this script, we get this inforamtion:

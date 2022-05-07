@@ -4,6 +4,7 @@ namespace: dev
 images:
 - name: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/backend-diploma
   newName: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/backend-diploma
-  newTag: 1.0.23
+  newTag: 1.0.26
 resources:
 - ../../../base/backend
+- ./secrets.yaml

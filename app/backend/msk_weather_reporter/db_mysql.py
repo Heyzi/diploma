@@ -3,7 +3,7 @@ import mysql.connector
 from mysql.connector import errorcode
 import os
 
-DB_NAME = os.getenv('DB_NAME')
+DB_NAME = 'mypyapp1'
 
 cnx = mysql.connector.connect(
   host=os.getenv('DBHOST'),
