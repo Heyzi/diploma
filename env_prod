@@ -1,4 +1,4 @@
 DBHOST=mypyapp1.cln3onwsibgz.eu-central-1.rds.amazonaws.com
 DBUSER=mypyapp1
 DBPASSWD=mypyapp1
-DB_NAME=mypyapp1
+DB_NAME=db_prod

@@ -7,4 +7,4 @@ images:
   newTag: 1.0.25
 resources:
 - ../../../base/backend
-- secrets.yaml
+- ./secrets.yaml
