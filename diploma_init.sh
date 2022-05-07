@@ -40,7 +40,12 @@ kubectl patch deployment metrics-server -n kube-system --type 'json' -p '[{"op":
 echo "done"
 
 #install in dev namespace
-echo "6. Deploy app in dev namespace..."
+echo "6. Deploy app and secrets in dev namespace..."
+
+kubectl create secret generic config \
+ --from-env-file ./env_dev -ndev \
+ --dry-run=client --output=yaml > kustomize/overlays/dev/backend/secrets.yaml
+
 kustomize build kustomize/overlays/dev/frontend | kubectl apply -f - 1>/dev/null 
 kustomize build kustomize/overlays/dev/backend | kubectl apply -f - 1>/dev/null 
 
@@ -49,6 +54,9 @@ echo "done"
 
 #install in prod namespace
 echo "7. Deploy app in prod namespace..."
+kubectl create secret generic config \
+ --from-env-file ./env_prod -nprod \
+ --dry-run=client --output=yaml > kustomize/overlays/prod/backend/secrets.yaml
 kustomize build kustomize/overlays/prod/frontend | kubectl apply -f - 1>/dev/null 
 kustomize build kustomize/overlays/prod/backend | kubectl apply -f -  1>/dev/null 
 echo "done"

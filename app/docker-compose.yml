@@ -7,6 +7,10 @@ services:
      dockerfile: ./Dockerfile
     environment:
       - FLASK_ENV=development
+      - DBHOST=123
+      - DBUSER=mypyapp1
+      - DBPASSWD=mypyapp1
+      - DB_NAME=mypyapp1
   frontend:
     build:
       context: ./frontend/

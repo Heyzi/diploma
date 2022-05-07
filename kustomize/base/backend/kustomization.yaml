@@ -4,3 +4,4 @@ resources:
 - deployment.yaml
 - hpa.yaml
 - secret.yaml
+- service.yaml
