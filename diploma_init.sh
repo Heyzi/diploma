@@ -9,10 +9,7 @@ echo "done"
 
 #Creaing NS
 echo "2. Creating namespaces in k8s..."
-kubectl create namespace argocd 1>/dev/null
-kubectl create namespace dev 1>/dev/null
-kubectl create namespace prod 1>/dev/null
-kubectl create namespace mon 1>/dev/null && 
+for i in argocd dev prod mon; do kubectl create namespace $i; done
 echo "done"
 
 #insall prometheus and grafana
@@ -42,9 +39,9 @@ echo "done"
 #install in dev namespace
 echo "6. Deploy app and secrets in dev namespace..."
 
-kubectl create secret generic config \
- --from-env-file ./env_dev -ndev \
- --dry-run=client --output=yaml > kustomize/overlays/dev/backend/secrets.yaml
+# kubectl create secret generic config \
+#  --from-env-file ./env_dev -ndev \
+#  --dry-run=client --output=yaml > kustomize/overlays/dev/backend/secrets.yaml
 
 kustomize build kustomize/overlays/dev/frontend | kubectl apply -f - 1>/dev/null 
 kustomize build kustomize/overlays/dev/backend | kubectl apply -f - 1>/dev/null 
@@ -54,9 +51,9 @@ echo "done"
 
 #install in prod namespace
 echo "7. Deploy app in prod namespace..."
-kubectl create secret generic config \
- --from-env-file ./env_prod -nprod \
- --dry-run=client --output=yaml > kustomize/overlays/prod/backend/secrets.yaml
+# kubectl create secret generic config \
+#  --from-env-file ./env_prod -nprod \
+#  --dry-run=client --output=yaml > kustomize/overlays/prod/backend/secrets.yaml
 kustomize build kustomize/overlays/prod/frontend | kubectl apply -f - 1>/dev/null 
 kustomize build kustomize/overlays/prod/backend | kubectl apply -f -  1>/dev/null 
 echo "done"
@@ -72,7 +69,10 @@ kubectl port-forward -n argocd svc/argocd-server  8080:443 &
 #echo "ARGOCD url:" "$(kubectl get svc argocd-server -n argocd -o jsonpath="{.status.loadBalancer.ingress[*].hostname}")"
 
 echo "DEV Application url:" "$(kubectl get svc httpd -n dev -o  jsonpath="{.status.loadBalancer.ingress[*].hostname}")"
-echo "PROD Application url:" "$(kubectl get svc httpd -n prod -o  jsonpath="{.status.loadBalancer.ingress[*].hostname}")" 
+echo "PROD Application url:" "$(kubectl get svc httpd -n prod -o  jsonpath="{.status.loadBalancer.ingress[*].hostname}")"
+echo "DB name:" "$(aws rds describe-db-instances| jq -r '.DBInstances[] | {DBInstanceIdentifier} | join(" ")')"
+echo "DB endpoint:" "$(aws rds describe-db-instances| jq -r '.DBInstances[].Endpoint| {Address} | join(" ")')"
+
 echo "Grafana URL:" "http://localhost:3000/"
 echo "ARGOCD URL:" "http://localhost:8080/"
 echo "ARGOCD PASSWD:" "$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)"
