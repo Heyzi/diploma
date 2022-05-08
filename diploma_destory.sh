@@ -14,9 +14,10 @@ echo "2. Delete app in prod namespace..."
 kustomize build kustomize/overlays/prod/frontend | kubectl apply -f -  1>/dev/null && 
 echo "done"
 #
-echo "3. TF infra destroy"
-terraform -chdir=infra/01_eks_cluster plan
-terraform -chdir=infra/01_eks_cluster destroy -auto-approve
+echo "3. infra destroy"
+# terraform -chdir=infra/01_eks_cluster plan
+# terraform -chdir=infra/01_eks_cluster destroy -auto-approve
+eksctl delete cluster -f infra/02_eksctl/cluster.yaml
 
 
 

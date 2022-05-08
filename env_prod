@@ -2,3 +2,4 @@ DBHOST=url
 DBUSER=mypyapp1
 DBPASSWD=mypyapp1
 DB_NAME=db_prod
+FLASK_ENV=production

@@ -1,6 +1,9 @@
-#  [24 stream] EPAM diploma
+![dev_back](https://github.com/heyzi/diploma/actions/workflows/dev_back_ci.yml/badge.svg) ![prod_back](https://github.com/heyzi/diploma/actions/workflows/prod_back_configuration.yml/badge.svg)
+
+![dev_front](https://github.com/heyzi/diploma/actions/workflows/dev_front_ci.yml/badge.svg) ![prod_front](https://github.com/heyzi/diploma/actions/workflows/prod_front_configuration.yml/badge.svg)
 
 ---
+#  [24 stream] EPAM diploma
 
 ## Variant 7
 Using API https://www.metaweather.com/api/ get data about weather in Moscow for current month and store it into your DB: id, weather_state_name, wind_direction_compass, created, applicable_date, min_temp, max_temp, the_temp. Output the data by date (the date is set) in form of a table and sort them by created in ascending order.
@@ -72,6 +75,13 @@ terraform -chdir=infra/01_eks_cluster plan
 terraform -chdir=infra/01_eks_cluster apply -auto-approve
 ```
 
+> _Due to bugs found in the deployed cluster via terraform, it is better to deploy the cluster via eksctl:_
+
+> eksctl create cluster -f infra/02_eksctl/cluster.yaml
+
+>_And deploy the base by hand (don't forget about security groups)_
+
+
 2. Launch initialization script (~3 min):
 ```sh
 Fullfill DB information:
@@ -80,6 +90,16 @@ env_prod
 
 ./diploma_init.sh
 ```
+#### Variables in **env_dev** and **env_prod**:
+
+**DBHOST=** - database endpoint
+
+**DBUSER=-** databse instance user
+
+**DBPASSWD=** - databse instance user password
+
+**DB_NAME=** - any name, db will be created at app launch
+
 3. At the end of the run this script, we get this inforamtion:
 
 - "DEV Application url:" %url%
@@ -95,3 +115,15 @@ env_prod
 - http://localhost:8080/
 
 2. ✨Suffer again✨
+
+---
+### Usefull staff:
+
+- Scaller logs:
+```
+kubectl -n kube-system logs -f deployment/cluster-autoscaler
+```
+- Total pods count:
+```
+kubectl get po -A --no-headers | wc -l
+```
