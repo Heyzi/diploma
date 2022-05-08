@@ -1,6 +1,6 @@
-![dev_back](https://github.com/heyzi/diploma/actions/workflows/dev_back_ci.yml/badge.svg) ![prod_back](https://github.com/heyzi/diploma/actions/workflows/prod_back_configuration.yml/badge.svg)
+[![Dev backend CI](https://github.com/Heyzi/diploma/actions/workflows/dev_back_ci.yml/badge.svg?branch=development)](https://github.com/Heyzi/diploma/actions/workflows/dev_back_ci.yml) [![Prod backend configuration](https://github.com/Heyzi/diploma/actions/workflows/prod_back_configuration.yml/badge.svg?branch=main)](https://github.com/Heyzi/diploma/actions/workflows/prod_back_configuration.yml)
 
-![dev_front](https://github.com/heyzi/diploma/actions/workflows/dev_front_ci.yml/badge.svg) ![prod_front](https://github.com/heyzi/diploma/actions/workflows/prod_front_configuration.yml/badge.svg)
+[![Dev front CI](https://github.com/Heyzi/diploma/actions/workflows/dev_front_ci.yml/badge.svg?branch=development)](https://github.com/Heyzi/diploma/actions/workflows/dev_front_ci.yml) [![Prod frontend configuration](https://github.com/Heyzi/diploma/actions/workflows/prod_back_configuration.yml/badge.svg?branch=main)](https://github.com/Heyzi/diploma/actions/workflows/prod_front_configuration.yml)
 
 ---
 #  [24 stream] EPAM diploma
