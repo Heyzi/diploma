@@ -1,0 +1,26 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: diploma-cluster
+  region: eu-central-1
+  version: "1.22"
+vpc:
+  cidr: 11.11.0.0/16
+  autoAllocateIPv6: false
+nodeGroups:
+  - name: k8s-nodes
+    instanceType: t3.medium
+    minSize: 1
+    maxSize: 3
+    desiredCapacity: 1
+    privateNetworking: true
+    labels: { role: workers }
+    availabilityZones: ["eu-central-1a","eu-central-1b","eu-central-1c"]
+    propagateASGTags: true #autoscale
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+addons:
+  - name: vpc-cni
+    version: latest
