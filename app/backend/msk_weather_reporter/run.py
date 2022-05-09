@@ -10,14 +10,17 @@ from cpu_load_generator import load_single_core, load_all_cores, from_profile
 
 app = Flask(__name__)
 
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-    
+    with open('pyapp-release', 'rb') as fp:
+     v = fp.read()
     if request.method == "GET":
       date = time.strftime("%Y-%m")
       result = user_select(time.strftime("%Y-%m"))
-
-      return render_template("index.html", data=result, cur_month=date, hostname=socket.gethostname(), env=os.getenv('FLASK_ENV'))
+      
+      return render_template("index.html", data=result, cur_month=date, hostname=socket.gethostname(), env=os.getenv('FLASK_ENV'), version=v)
     else:
       userdate = request.form["update_month"]
       if request.form['action'] == 'update':
