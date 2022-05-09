@@ -28,8 +28,9 @@ helm repo add grafana https://grafana.github.io/helm-charts  1>/dev/null
 helm repo add stable https://charts.helm.sh/stable 1>/dev/null
 helm repo update 1>/dev/null 
 
-helm upgrade --install loki grafana/loki-stack --namespace mon 1>/dev/null 
-helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace mon 1>/dev/null && 
+ 
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace mon 1>/dev/null
+helm upgrade --install loki grafana/loki-stack --namespace mon 1>/dev/null  && 
 echo "done"
 
 #install argocd
@@ -72,7 +73,7 @@ echo "done"
 
 #Wainting for elb address:
 echo "9. Waiting for elb address..."
-sleep 10
+sleep 15
 
 #monitoring port-forward
 echo "10. Port-forward grafana and argocd..." 

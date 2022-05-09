@@ -17,7 +17,7 @@ def index():
       date = time.strftime("%Y-%m")
       result = user_select(time.strftime("%Y-%m"))
 
-      return render_template("index.html", data=result, cur_month=date, hostname=socket.gethostname())
+      return render_template("index.html", data=result, cur_month=date, hostname=socket.gethostname(), env=os.getenv('FLASK_ENV'))
     else:
       userdate = request.form["update_month"]
       if request.form['action'] == 'update':
@@ -41,7 +41,7 @@ def index():
           # while True:
           #  math.factorial(50)  
 
-    return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal, hostname=socket.gethostname())
+    return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal, hostname=socket.gethostname(), env=os.getenv('FLASK_ENV'))
 
 @app.errorhandler(500)
 def internal_error(error):
