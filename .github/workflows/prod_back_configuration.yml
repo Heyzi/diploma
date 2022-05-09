@@ -4,7 +4,7 @@ name: Prod backend configuration
     branches:
       - main
     paths:
-      - app/backend/pyapp-release
+      - app/backend/msk_weather_reporter/pyapp-release
 jobs:
   # build:
   #   runs-on: ubuntu-latest
@@ -87,7 +87,7 @@ jobs:
 
     - name: Read backend version
       id: getversion
-      run: echo "::set-output name=version::$(cat app/backend/pyapp-release)"
+      run: echo "::set-output name=version::$(cat app/backend/msk_weather_reporter/pyapp-release)"
 
     - name: Update Kubernetes resources
       env:
