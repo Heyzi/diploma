@@ -89,7 +89,7 @@ jobs:
 
     - name: Read backend version
       id: getversion
-      run: echo "::set-output name=version::$(cat app/backend/pyapp-release)"
+      run: echo "::set-output name=version::$(cat app/backend/msk_weather_reporter/pyapp-release)"
 
     - name: Update Kubernetes resources
       env:
