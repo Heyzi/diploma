@@ -54,4 +54,9 @@ spec:
               secretKeyRef:
                 name: config
                 key: DBUSER
+          - name: FLASK_ENV
+            valueFrom:
+              secretKeyRef:
+                name: config
+                key: FLASK_ENV
           

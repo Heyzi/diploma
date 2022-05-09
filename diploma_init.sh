@@ -64,8 +64,8 @@ echo "8. Deploy app in prod namespace..."
 # kubectl create secret generic config \
 #  --from-env-file ./env_prod -nprod \
 #  --dry-run=client --output=yaml > kustomize/overlays/prod/backend/secrets.yaml
-kubectl create secret generic config \
- --from-env-file ./env_prod -nprod \
+# kubectl create secret generic config \
+#  --from-env-file ./env_prod -nprod 
 
 kustomize build kustomize/overlays/prod/frontend | kubectl apply -f - 1>/dev/null 
 kustomize build kustomize/overlays/prod/backend | kubectl apply -f -  1>/dev/null 
