@@ -4,6 +4,6 @@ namespace: dev
 images:
 - name: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/frontend-diploma
   newName: 035604165710.dkr.ecr.eu-central-1.amazonaws.com/frontend-diploma
-  newTag: vHESOYAM_14
+  newTag: vHESOYAM_15
 resources:
 - ../../../base/frontend
