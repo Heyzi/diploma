@@ -112,7 +112,7 @@ jobs:
         git pull
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -am "update deployment verion"
+        git commit -am "update deployment version"
 
     - name: Push changes
       uses: ad-m/github-push-action@master
