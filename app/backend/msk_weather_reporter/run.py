@@ -44,7 +44,7 @@ def index():
           # while True:
           #  math.factorial(50)  
 
-    return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal, hostname=socket.gethostname(), env=os.getenv('FLASK_ENV'))
+    return render_template("index.html", data=result2, cur_month=userdate, showmodal=showmodal, hostname=socket.gethostname(), env=os.getenv('FLASK_ENV'), version=v)
 
 @app.errorhandler(500)
 def internal_error(error):
